@@ -1,0 +1,29 @@
+{
+  "name": "rn-cli",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "./src/index.ts",
+  "bin": {
+    "rn-cli": "./src/index.ts"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "start": "ts-node ./src/index.ts"
+  },
+  "dependencies": {
+    "chalk": "4.1.2",
+    "figlet": "^1.7.0",
+    "inquirer": "8.0.0",
+    "lodash": "^4.17.21",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/figlet": "^1.5.8",
+    "@types/inquirer": "^9.0.7",
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.5",
+    "@types/yargs": "^17.0.32",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
