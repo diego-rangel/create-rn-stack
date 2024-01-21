@@ -2,7 +2,7 @@ import { CommandModule } from "yargs";
 
 import { CONSTANTS } from "../@types/constants";
 import { CreateProjectCommandOptions } from "../@types/commands";
-import { promptAppName } from "../prompts/promptAppName";
+import { promptAppIdentifier } from "../prompts/promptAppIdentifier";
 import { promptBackend } from "../prompts/promptBackend";
 import { promptEslint } from "../prompts/promptEslint";
 import { promptIcon } from "../prompts/promptIcon";
@@ -11,27 +11,32 @@ import { promptPackageManager } from "../prompts/promptPackageManager";
 import { promptSplash } from "../prompts/promptSplash";
 import { promptStateManagement } from "../prompts/promptStateManagement";
 import { promptStyling } from "../prompts/promptStyling";
-import { promptTesting } from "../prompts/promptTesting";
-import { promptTypescript } from "../prompts/promptTypescript";
 import { promptImportAlias } from "../prompts/promptImportAlias";
 import { createProjectHandler } from "../handlers/createProjectHandler";
-import { promptAppTitle } from "../prompts/promptAppTitle";
+import { promptAppName } from "../prompts/promptAppName";
 import { promptPackageName } from "../prompts/promptPackageName";
+import chalk from "chalk";
 
 export const createCommand: CommandModule<{}, CreateProjectCommandOptions> = {
   command: ["create [name]"],
   describe: "🚀 Create a react native project",
   builder: (yargs) => {
     return yargs
-      .positional("name", {
+      .positional("appName", {
         describe: "🔤 The project name",
         type: "string",
       })
-      .option("typescript", {
-        alias: "ts",
-        describe: "🔨 Setup the usage of Typescript",
-        type: "boolean",
-        default: true,
+      .positional("appIdentifier", {
+        describe: "🔤 The project identifier",
+        type: "string",
+      })
+      .positional("packageName", {
+        describe: "🔤 The package name (Android) and bundle ID (iOS)",
+        type: "string",
+      })
+      .positional("directory", {
+        describe: "🔨 A custom directory to output the project",
+        type: "string",
       })
       .option("enableImportAlias", {
         alias: "ia",
@@ -66,13 +71,6 @@ export const createCommand: CommandModule<{}, CreateProjectCommandOptions> = {
         type: "string",
         default: "none",
         choices: CONSTANTS.BACKEND_CHOICES,
-      })
-      .option("testing", {
-        alias: "test",
-        describe: "🧪 Setup a testing library",
-        type: "string",
-        default: "none",
-        choices: CONSTANTS.TESTING_CHOICES,
       })
       .option("eslint", {
         alias: "es",
@@ -110,20 +108,26 @@ export const createCommand: CommandModule<{}, CreateProjectCommandOptions> = {
       });
   },
   handler: async (argv) => {
-    await promptAppName(argv);
-    await promptAppTitle(argv);
-    await promptPackageName(argv);
-    await promptTypescript(argv);
-    await promptImportAlias(argv);
-    await promptNavigation(argv);
-    await promptStyling(argv);
-    await promptStateManagement(argv);
-    await promptBackend(argv);
-    await promptTesting(argv);
-    await promptEslint(argv);
-    await promptSplash(argv);
-    await promptIcon(argv);
-    await promptPackageManager(argv);
-    await createProjectHandler(argv);
+    try {
+      await promptAppName(argv);
+      await promptAppIdentifier(argv);
+      await promptPackageName(argv);
+      await promptImportAlias(argv);
+      await promptNavigation(argv);
+      await promptStyling(argv);
+      await promptStateManagement(argv);
+      await promptBackend(argv);
+      await promptEslint(argv);
+      await promptSplash(argv);
+      await promptIcon(argv);
+      await promptPackageManager(argv);
+
+      await createProjectHandler(argv);
+
+      console.log(chalk.green("✅ Your project was created successfully"));
+    } catch (error) {
+      console.log(chalk.red("❌ An error occurred while creating the project"));
+      console.log(chalk.red(error));
+    }
   },
 };

@@ -1,15 +1,15 @@
 export type CreateProjectCommandOptions = {
+  appIdentifier?: string;
   appName?: string;
-  appTitle?: string;
+  appProjectName?: string;
   packageName?: string;
-  typescript?: boolean;
+  directory?: string;
   enableImportAlias?: boolean;
   navigation?: string;
   rootNavigator?: string;
   styling?: string;
   stateManagement?: string;
   backend?: string;
-  testing?: string;
   eslint?: string;
   splash?: string;
   icon?: string;
